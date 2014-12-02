@@ -78,7 +78,6 @@ public class RegLogAdmin : MonoBehaviour {
             {
                 if (manager.ConnectToDatabase())
                 {
-
                     manager.InsertRecord<Pers>(new Pers() { Name = persName.text, RaceId = raceId, UserId = DataBaseInfo.currentUserId });
                     Pers pers = (Pers)((List<Pers>)manager.ReadAll<Pers>()).Single(x => x.Name == persName.text && x.RaceId == raceId && x.UserId == DataBaseInfo.currentUserId);
                     if (pers != null)
@@ -226,31 +225,4 @@ public class RegLogAdmin : MonoBehaviour {
                 break;
         }
     }
-
-   /* void Start()
-    {
-        using (DatabaseManager manager = new DatabaseManager("gamedata.db"))
-        {
-            if (manager.ConnectToDatabase())
-            {
-               // manager.InsertRecord<Item>(new Item() { Name = "Small Sword", Stats = 5, SpeedAttack = 3f, Description = "", Image = "1_25", ItemTypeId = 1, BuyPrice = 10, SellPrice = 8, ConditionId = 1, AttackDistance = 0});
-               /* manager.InsertRecord<Item>(new Item() { Name = "Middle Sword", Stats = 10, SpeedAttack = 3f, Description = "", Image = "2_25", ItemTypeId = 1, BuyPrice = 15, SellPrice = 12, ConditionId = 1, AttackDistance = 0 });
-                manager.InsertRecord<Item>(new Item() { Name = "Big Sword", Stats = 15, SpeedAttack = 3f, Description = "", Image = "3_25", ItemTypeId = 1, BuyPrice = 18, SellPrice = 15, ConditionId = 1, AttackDistance = 0 });
-                manager.InsertRecord<Item>(new Item() { Name = "Magic Sword", Stats = 20, SpeedAttack = 3f, Description = "", Image = "4_25", ItemTypeId = 1, BuyPrice = 20, SellPrice = 15, ConditionId = 2, AttackDistance = 0 });
-
-
-                manager.InsertRecord<Item>(new Item() { Name = "Small Bow", Stats = 5, SpeedAttack = 3f, Description = "", Image = "1_19", ItemTypeId = 2, BuyPrice = 10, SellPrice = 8, ConditionId = 1, AttackDistance = 5 });
-                manager.InsertRecord<Item>(new Item() { Name = "Middle Bow", Stats = 10, SpeedAttack = 3f, Description = "", Image = "2_19", ItemTypeId = 2, BuyPrice = 15, SellPrice = 12, ConditionId = 1, AttackDistance = 5 });
-                manager.InsertRecord<Item>(new Item() { Name = "Big Bow", Stats = 15, SpeedAttack = 3f, Description = "", Image = "3_19", ItemTypeId = 2, BuyPrice = 18, SellPrice = 15, ConditionId = 1, AttackDistance = 5 });
-                manager.InsertRecord<Item>(new Item() { Name = "Magic Bow", Stats = 20, SpeedAttack = 3f, Description = "", Image = "4_19", ItemTypeId = 2, BuyPrice = 20, SellPrice = 15, ConditionId = 3, AttackDistance = 5 });
-
-
-
-                manager.InsertRecord<Item>(new Item() { Name = "Rag Armor", Stats = 5, Description = "", Image = "1_17", ItemTypeId = 3, BuyPrice = 10, SellPrice = 2, ConditionId = 1, AttackDistance = 0 });
-                manager.InsertRecord<Item>(new Item() { Name = "Silk Armor", Stats = 10, Description = "", Image = "2_17", ItemTypeId = 3, BuyPrice = 15, SellPrice = 10, ConditionId = 1, AttackDistance = 0 });
-                manager.InsertRecord<Item>(new Item() { Name = "Leather Armor", Stats = 15, Description = "", Image = "3_17", ItemTypeId = 3, BuyPrice = 20, SellPrice = 15, ConditionId = 3, AttackDistance = 0 });
-               / manager.InsertRecord<Progress>(new Progress() { CurrentLevel = 0, Money = 0, PersId = 1, Score = 0 });
-            }
-        }
-    } */
 }

@@ -5,10 +5,10 @@ public class WaveObserver : MonoBehaviour {
     public EventManager em;
     float time = 2f;
     int level = 0;
-    public float timeLine = 10f;
+    public float timeLine = 3f;
 
 	void Start () {
-       // em = GameObject.Find("ObserverGO").GetComponent<EventManager>();
+        em = GameObject.Find("ObserverGO").GetComponent<EventManager>();
         InvokeRepeating("Time",1f,1f);
 	}
 	
@@ -17,7 +17,7 @@ public class WaveObserver : MonoBehaviour {
         timeLine--;
         if(timeLine <= 0)
         {
-            timeLine = 10;
+            timeLine = 3;
             level++;
             em.ChangeLevelEvent(level);
         }

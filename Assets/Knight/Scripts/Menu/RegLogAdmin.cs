@@ -79,12 +79,6 @@ public class RegLogAdmin : MonoBehaviour {
                 if (manager.ConnectToDatabase())
                 {
                     manager.InsertRecord<Pers>(new Pers() { Name = persName.text, RaceId = raceId, UserId = DataBaseInfo.currentUserId });
-                    Pers pers = (Pers)((List<Pers>)manager.ReadAll<Pers>()).Single(x => x.Name == persName.text && x.RaceId == raceId && x.UserId == DataBaseInfo.currentUserId);
-                    if (pers != null)
-                    {
-                        Debug.Log("Find");
-                        manager.InsertRecord<Progress>(new Progress() { CurrentLevel = 0, Money = 0, PersId = pers.Id, Score = 0 });
-                    }
                 }
             }
             createPersFlag = false;

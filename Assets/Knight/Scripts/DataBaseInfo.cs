@@ -133,7 +133,23 @@ namespace Tables
             }
         }
     }
+    public class EquipedItems
+    {
+        [PrimaryKeyField(true)]
+        public int Id { get; set; }
 
+        [ForeignKeyField(true, "Pers", "Id")]
+        public int PersId { get; set; }
+
+        [ForeignKeyField(true, "Item", "Id")]
+        public int Sword { get; set; }
+
+        [ForeignKeyField(true, "Item", "Id")]
+        public int Bow { get; set; }
+
+        [ForeignKeyField(true, "Item", "Id")]
+        public int Armor { get; set; }
+    }
     public class Shop
     {
         [PrimaryKeyField(true)]

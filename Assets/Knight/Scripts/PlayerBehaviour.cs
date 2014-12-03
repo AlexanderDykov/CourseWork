@@ -91,7 +91,7 @@ public class PlayerBehaviour: MonoBehaviour
                             break;
                         case "ButtonBone":
                             curentIdBut = Input.GetTouch(i).fingerId;
-                            PlayerStats.curWeapone = CurrentWeapone.Bone;
+                            PlayerStats.curWeapone = CurrentWeapone.Bow;
                             break;
                         case "ButtonSword":
                             PlayerStats.curWeapone = CurrentWeapone.Sword;
@@ -112,7 +112,7 @@ public class PlayerBehaviour: MonoBehaviour
                         case CurrentWeapone.Sword:
                             FireSword();
                             break;
-                        case CurrentWeapone.Bone:
+                        case CurrentWeapone.Bow:
                             FireBone();
                             break;
                     }
@@ -171,7 +171,7 @@ public class PlayerBehaviour: MonoBehaviour
                     break;
                 case "ButtonBone":
                     fire = true;
-                    PlayerStats.curWeapone = CurrentWeapone.Bone;
+                    PlayerStats.curWeapone = CurrentWeapone.Bow;
                     break;
                 case "ButtonSword":
                     fire = true;
@@ -195,7 +195,7 @@ public class PlayerBehaviour: MonoBehaviour
                 case CurrentWeapone.Sword:
                     FireSword();
                     break;
-                case CurrentWeapone.Bone:
+                case CurrentWeapone.Bow:
                     FireBone();
                     break;
             }

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public enum CurrentWeapone
 {
     Sword,
-    Bone
+    Bow
 }
 public class PlayerStats : MonoBehaviour {
 
@@ -23,14 +23,4 @@ public class PlayerStats : MonoBehaviour {
     private SpriteRenderer healthBar;			// Reference to the sprite renderer of the health bar.
     private Vector3 healthScale;				// The local scale of the health bar initially (with full health).
 
-
-	// Use this for initialization
-	void Start () {
-        Debug.Log("Bone");
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 }

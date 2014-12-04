@@ -55,14 +55,12 @@ public class Monster : MonoBehaviour {
     }
     public void OnChangeWave(EventManager EM, CustomArg e)
     {
-        damage += 2 * e.GetNumber();
-        maxHP += 10;
-        HP = maxHP;
-        UpdateHealthBar();
+        damage += 2 * e.GetNumber();        
     }
     void OnEnabled()
     {
         HP = maxHP;
+        UpdateHealthBar();
     }
     public void UpdateHealthBar()
     {

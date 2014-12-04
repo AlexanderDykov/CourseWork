@@ -94,19 +94,23 @@ public class RegLogAdmin : MonoBehaviour {
     bool choosePersFlag;
 
     List<Pers> p;
-    List<Progress> prog;
     void GetAllPers()
     {
         using (DatabaseManager manager = new DatabaseManager("gamedata.db"))
         {
             if (manager.ConnectToDatabase())
             {
-                p = (List<Pers>)manager.ReadAll<Pers>();
-                prog = (List<Progress>)manager.ReadAll<Progress>();
+                p = (List<Pers>)manager.ReadByFieldName<Pers>("UserId",DataBaseInfo.currentUserId);
             }
         }
     }
     string persStr ="Choose pers";
+
+    public void StartGame()
+    {
+        if (persStr != "Choose pers")
+            Application.LoadLevel(1);
+    }
     void OnGUI()
     {
         #region
@@ -155,7 +159,7 @@ public class RegLogAdmin : MonoBehaviour {
                             {
                                 persStr = p[i].Name;
                                 DataBaseInfo.currentPersId = p[i].Id;
-                                DataBaseInfo.progress = prog.Single(x => x.PersId == p[i].Id);
+                                DataBaseInfo.progress = DataBaseInfo.allProgress.Single(x => x.PersId == p[i].Id);
                                 isOpen = false;
                             }
                         }
@@ -175,6 +179,13 @@ public class RegLogAdmin : MonoBehaviour {
         persInfo.SetActive(false);
         choosePers.SetActive(true);
     }
+
+    public void CancelPers()
+    {
+        choosePersFlag = false;
+        persInfo.SetActive(true);
+        choosePers.SetActive(false);
+    }
     public void Login()
     {
         switch(role)
@@ -185,7 +196,6 @@ public class RegLogAdmin : MonoBehaviour {
                 {
                     DataBaseInfo.currentUserId = user.Id;
                     DataBaseInfo.isAdmin = false;
-                    Debug.Log("Login" + user.Id);
                     PersInfo();
                 }
                 break;
@@ -195,7 +205,6 @@ public class RegLogAdmin : MonoBehaviour {
                 {
                     DataBaseInfo.currentUserId = admin.UserId;
                     DataBaseInfo.isAdmin = true;
-                    Debug.Log("LoginAdmin " + admin.UserId);
                     PersInfo();
                 }
                 break;

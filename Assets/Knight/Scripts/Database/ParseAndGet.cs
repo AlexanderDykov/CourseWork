@@ -93,7 +93,7 @@ namespace Assets.Scripts
                 }
 
             footer_text = ");";
-            return string.Format("{0}{1}{2}", header_text, body_text.Substring(0, body_text.Length - 2), footer_text); ;
+            return string.Format("{0}{1}{2}", header_text, body_text.Substring(0, body_text.Length - 2), footer_text); 
         }
         public IEnumerable<string> InsertCollectionInstruction<T>(IEnumerable<T> collection) where T : class
         {
@@ -123,12 +123,57 @@ namespace Assets.Scripts
                 return "DELETE FROM " + typeof(T).Name + " WHERE Id  = '" + value + "'";
             else
                 return "DELETE FROM " + typeof(T).Name + " WHERE Id  = " + value;
-
         }
         public string UpdateItemsByFieldName<T>(string fieldNameSearch, string valueSearch, string fieldNameToUpdate, string newValue)
         {
             return "UPDATE " + typeof(T).Name + " SET " + fieldNameToUpdate + " = " + newValue + " WHERE " + fieldNameSearch + " = " + valueSearch;
         }
+
+        //
+        public string UpdateRecord<T>(string fieldNameSearch, string valueSearch, T newItem)
+        {
+            header_text = "";
+            body_text = "";
+            footer_text = "";
+            header_text = "UPDATE " + typeof(T).Name + " SET ";            
+            var props = typeof(T).GetProperties();
+            foreach (var it in props)
+            {
+                switch (converter[(it.GetValue(newItem, null)).GetType().Name])
+                {
+                    case Types.Boolean:
+                        body_text += it.Name + string.Format("{0}, ", (it.GetValue(newItem, null).ToString() == "False") ? 0 : 1);
+                        break;
+
+                    case Types.Int32:
+                        var attr = it.GetCustomAttributes(false);
+                        if (attr != null && attr.Count() > 0)
+                        {
+                            foreach (var i in attr)
+                            {
+                                if (i is PrimaryKeyField) { }
+                                if (i is ForeignKeyField)
+                                    body_text += it.Name + " = " + it.GetValue(newItem, null) + ", ";
+                            }
+                        }
+                        else
+                            body_text += it.Name + " = " + it.GetValue(newItem, null) + ", ";    
+                        break;
+
+                    case Types.String:
+                        body_text += it.Name + " = '" + it.GetValue(newItem, null) + "', "; 
+                        break;
+                    
+                    default:
+                        body_text += it.Name + " = " + it.GetValue(newItem, null) + ", ";    
+                        break;
+
+                }
+            }
+            footer_text = " WHERE " + fieldNameSearch + " = " + valueSearch;
+            return string.Format("{0}{1}{2}", header_text, body_text.Substring(0, body_text.Length - 2), footer_text); 
+        }
+        //
         public string ReadAllInstruction<T>()
         {
             return "SELECT * FROM " + typeof(T).Name;

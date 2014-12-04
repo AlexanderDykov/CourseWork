@@ -11,13 +11,6 @@ using System;
 
 public class ShopForm : MonoBehaviour
 {
-    #region
-    //List<ttt> res;
-      // Use this for initialization
-      
-         
-    #endregion
-
     List<Item> tempItems = new List<Item>();
 
     float width = 0;

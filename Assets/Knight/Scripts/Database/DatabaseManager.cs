@@ -144,9 +144,16 @@ namespace Assets.Scripts
             ExecuteScript(tabInstruction);
         }
 
-        public bool UpdateRecordByFieldName<T>(string fieldNameSearch, string valueSearch, string fieldNameToUpdate, string newValue)
+        public bool UpdateFieldInRecord<T>(string fieldNameSearch, string valueSearch, string fieldNameToUpdate, string newValue)
         {
             if (ExecuteScript(new ParseAndGet().UpdateItemsByFieldName<T>(fieldNameSearch, valueSearch, fieldNameToUpdate, newValue)))
+                return true;
+            return false;
+        }
+
+        public bool UpdateRecordByFieldName<T>(string fieldNameSearch, string valueSearch, T newRecord)
+        {
+            if (ExecuteScript(new ParseAndGet().UpdateRecord<T>(fieldNameSearch, valueSearch, newRecord)))
                 return true;
             return false;
         }

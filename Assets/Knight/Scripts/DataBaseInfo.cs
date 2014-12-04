@@ -249,17 +249,19 @@ public class DataBaseInfo : MonoBehaviour {
     public static int currentPersId;
     public static Progress progress;
     public static bool isAdmin = false;
-    public static List<Inventory> inventory;
+    public static List<Inventory> currentInventory;
     //for all users
     public static List<Shop> shop;
     public static List<Item> items;
     public static List<Race> races;
     public static List<Condition> conditions;
-    public static List<ItemType> types;       
+    public static List<ItemType> types;
+    public static List<Inventory> allInventories;
+    public static List<Progress> allProgress;
     //for log- reg- in
     public static List<Admin> admins;
     public static List<User> users;
-    void Start () {
+    void Awake () {
         using (DatabaseManager manager = new DatabaseManager("gamedata.db"))
         {
             if (manager.ConnectToDatabase())
@@ -272,6 +274,8 @@ public class DataBaseInfo : MonoBehaviour {
                 types = (List<ItemType>)manager.ReadAll<ItemType>();
                 shop = (List<Shop>)manager.ReadAll<Shop>();
                 races = (List<Race>)manager.ReadAll<Race>();
+                allInventories = (List<Inventory>)manager.ReadAll<Inventory>();
+                allProgress = (List<Progress>)manager.ReadAll<Progress>();
             }
         }   
         DontDestroyOnLoad(gameObject);

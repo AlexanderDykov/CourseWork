@@ -247,9 +247,10 @@ public class DataBaseInfo : MonoBehaviour {
     //for current session
     public static int currentUserId;
     public static int currentPersId;
-    public static Progress progress;
+    public static Progress currentProgress;
     public static bool isAdmin = false;
     public static List<Inventory> currentInventory;
+    public static EquipedItems currentEquipedItems;
     //for all users
     public static List<Shop> shop;
     public static List<Item> items;
@@ -258,6 +259,7 @@ public class DataBaseInfo : MonoBehaviour {
     public static List<ItemType> types;
     public static List<Inventory> allInventories;
     public static List<Progress> allProgress;
+    public static List<EquipedItems> allEquipedItems;
     //for log- reg- in
     public static List<Admin> admins;
     public static List<User> users;
@@ -276,6 +278,7 @@ public class DataBaseInfo : MonoBehaviour {
                 races = (List<Race>)manager.ReadAll<Race>();
                 allInventories = (List<Inventory>)manager.ReadAll<Inventory>();
                 allProgress = (List<Progress>)manager.ReadAll<Progress>();
+                allEquipedItems = (List<EquipedItems>)manager.ReadAll<EquipedItems>();
             }
         }   
         DontDestroyOnLoad(gameObject);

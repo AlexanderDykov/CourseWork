@@ -79,8 +79,9 @@ public class RegLogAdmin : MonoBehaviour {
                 if (manager.ConnectToDatabase())
                 {
                     manager.InsertRecord<Pers>(new Pers() { Name = persName.text, RaceId = raceId, UserId = DataBaseInfo.currentUserId });
+                   // DataBaseInfo
                 }
-            }
+            } 
             createPersFlag = false;
             persInfo.SetActive(true);
             createPers.SetActive(false);
@@ -101,6 +102,11 @@ public class RegLogAdmin : MonoBehaviour {
             if (manager.ConnectToDatabase())
             {
                 p = (List<Pers>)manager.ReadByFieldName<Pers>("UserId",DataBaseInfo.currentUserId);
+                DataBaseInfo.allProgress = (List<Progress>)manager.ReadAll<Progress>();
+                DataBaseInfo.allEquipedItems = (List<EquipedItems>)manager.ReadAll<EquipedItems>();
+                //DataBaseInfo.currentEquipedItems = (EquipedItems)manager.ReadByFieldName<EquipedItems>("UserId", DataBaseInfo.currentUserId).First();
+               // Debug.Log(DataBaseInfo.currentEquipedItems.PersId);
+               // Debug.Log(p.Count);
             }
         }
     }
@@ -159,7 +165,8 @@ public class RegLogAdmin : MonoBehaviour {
                             {
                                 persStr = p[i].Name;
                                 DataBaseInfo.currentPersId = p[i].Id;
-                                DataBaseInfo.progress = DataBaseInfo.allProgress.Single(x => x.PersId == p[i].Id);
+                                DataBaseInfo.currentEquipedItems = DataBaseInfo.allEquipedItems.Single(x => x.PersId == p[i].Id);
+                                DataBaseInfo.currentProgress = DataBaseInfo.allProgress.Single(x => x.PersId == p[i].Id);
                                 isOpen = false;
                             }
                         }

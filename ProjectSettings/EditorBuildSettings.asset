@@ -17,3 +17,7 @@ EditorBuildSettings:
     path: Assets/Knight/_Scenes/Shop.unity
   - enabled: 1
     path: Assets/Knight/_Scenes/UpdateItem.unity
+  - enabled: 1
+    path: Assets/Knight/_Scenes/SellItems.unity
+  - enabled: 1
+    path: Assets/Knight/_Scenes/ShowAll.unity

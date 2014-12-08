@@ -66,7 +66,7 @@ public class PlayerBehaviour: MonoBehaviour
             foreach(var hit in hits)
                 if (!hit.collider.isTrigger && hit.collider != null && hit.transform.gameObject.tag == "Enemy")
                 {
-                    hit.transform.gameObject.gameObject.GetComponent<Monster>().ChangeHP(-PlayerStats.damageFromSword);	
+                    hit.transform.gameObject.gameObject.GetComponent<Monster>().ChangeHP(-PlayerStats.damageFromSword+10);	
                 }
         }
     }
@@ -145,7 +145,6 @@ public class PlayerBehaviour: MonoBehaviour
 #if UNITY_ANDROID
         CheckTouchMob();       
 #endif
-
 #if UNITY_EDITOR
         TouchToWindowsPlatform();
 #endif
@@ -207,9 +206,7 @@ public class PlayerBehaviour: MonoBehaviour
             fire = false;
             player.rigidbody2D.velocity = Vector2.zero;
         }
-
     }
-
     private void TouchToWindowsPlatform()
     {
         if (Input.GetMouseButton(0))
@@ -218,5 +215,4 @@ public class PlayerBehaviour: MonoBehaviour
         if (Input.GetMouseButtonUp(0))
             CheckTouch(Input.mousePosition, "ended");
     }
-
 }

@@ -12,10 +12,10 @@ using UnityEngine.UI;
 
 
 
-public class ShopForm : MonoBehaviour
+public class SellItems : MonoBehaviour
 {
     List<Item> tempItems = new List<Item>();
-    List<Shop> tempShop = new List<Shop>();
+    List<Inventory> tempShop = new List<Inventory>();
     float width = 0;
     float height = 0;
     float widthForImage = 0;
@@ -24,17 +24,8 @@ public class ShopForm : MonoBehaviour
     public Text money;
     void Start()
     {
-        /*using (DatabaseManager manager = new DatabaseManager("gamedata.db"))
-        {
-            if (manager.ConnectToDatabase())
-            {
-                manager.UpdateFieldInRecord<Shop>("Id","1","Amount","8");
-            }
-        }
-        */
-
         money.text = "Money: " + DataBaseInfo.currentProgress.Money;
-        foreach (var it in DataBaseInfo.shop)
+        foreach (var it in DataBaseInfo.currentInventory)
             foreach (var item1 in DataBaseInfo.items)
             {
                 if (item1.Id == it.ItemId && it.Amount > 0)
@@ -61,8 +52,7 @@ public class ShopForm : MonoBehaviour
     private string sortStr = "Сортировка";
     private bool isOpen = false;
     private Vector2 scrollPos = Vector2.zero;
-    string searchByCost = "";
-    string searchByName = "";
+    string search = "";
     void OnGUI()
     {
         GUI.TextArea(new Rect((width * 2), 0, width + 10, height * 2.5f), info);
@@ -70,32 +60,16 @@ public class ShopForm : MonoBehaviour
         #region search
         if (GUI.Button(new Rect(250, Screen.height - 120, 150, 30), "Поиск"))
         {
-                tempItems = new List<Item>();
-
-                if (searchByCost != "")
+            tempItems = new List<Item>();
+            foreach (var item1 in DataBaseInfo.items)
+            {
+                if (item1.Name.Contains(search))
                 {
-                    foreach (var item1 in DataBaseInfo.items)
-                    {
-                        if (item1.Name.Contains(searchByName) && item1.BuyPrice == int.Parse(searchByCost))
-                        {
-                            tempItems.Add(item1);
-                        }
-                    }
+                    tempItems.Add(item1);
                 }
-                else
-                {
-                    foreach (var item1 in DataBaseInfo.items)
-                    {
-                        if (item1.Name.Contains(searchByName))
-                        {
-                            tempItems.Add(item1);
-                        }
-                    }
-                }
-                
+            }
         }
-        searchByName = GUI.TextArea(new Rect(250, Screen.height - 150, 150, 30), searchByName);
-        searchByCost = GUI.TextArea(new Rect(400, Screen.height - 150, 150, 30), searchByCost);
+        search = GUI.TextArea(new Rect(250, Screen.height - 150, 150, 30), search);
         #endregion
 
         #region sort
@@ -215,56 +189,36 @@ public class ShopForm : MonoBehaviour
 
                 }
             }
-            #region Buy
-            if (info != "" && DataBaseInfo.currentProgress.Money >= tempItems[temp].BuyPrice)
+
+            if (info != "")
             {
-                if (GUI.Button(new Rect(Screen.width - 100, Screen.height - 70, 70, 50), "Купить"))
+                if (GUI.Button(new Rect(Screen.width - 100, Screen.height - 70, 70, 50), "Продать"))
                 {
                     // Debug.Log(temp);
 
-                    DataBaseInfo.currentProgress.Money -= tempItems[temp].BuyPrice;
+                    DataBaseInfo.currentProgress.Money += tempItems[temp].SellPrice;
 
                     info = "";
                     tempShop[temp].Amount--;
+                    
                     using (DatabaseManager manager = new DatabaseManager("gamedata.db"))
                     {
                         if (manager.ConnectToDatabase())
                         {
-                            if (DataBaseInfo.currentInventory != null)
+                            Shop inv;
+                            if (DataBaseInfo.shop != null)
                             {
-                                Debug.Log(tempItems[temp].Id);
-                                Inventory inv = DataBaseInfo.currentInventory.FirstOrDefault(x => x.ItemId == tempItems[temp].Id);
-                               
+                                inv = DataBaseInfo.shop.FirstOrDefault(x => x.ItemId == tempItems[temp].Id);                                
                                 if (inv != null)
                                 {
-                                    Debug.Log(inv.Id);
                                     inv.Amount++;
-                                    manager.UpdateRecordByFieldName<Inventory>("Id", inv.Id.ToString(), inv);
-                                }
-                                else
-                                {
-                                    manager.InsertRecord<Inventory>(new Inventory() { ItemId = tempItems[temp].Id, Amount = 1, PersId = DataBaseInfo.currentPersId });
+                                    manager.UpdateRecordByFieldName<Shop>("Id", inv.Id.ToString(), inv);
                                 }
                             }
-                            else
-                            {
-                                manager.InsertRecord<Inventory>(new Inventory() { ItemId = tempItems[temp].Id, Amount = 1, PersId = DataBaseInfo.currentPersId });
-                            }
-                            DataBaseInfo.allInventories =(List<Inventory>) manager.ReadAll<Inventory>();
-                            Debug.Log(DataBaseInfo.allInventories.Count);
-                            DataBaseInfo.currentInventory = new List<Inventory>();
-                            foreach (var inv in DataBaseInfo.allInventories)
-                            {
-                                if (inv.PersId == DataBaseInfo.currentPersId)
-                                {
-                                    DataBaseInfo.currentInventory.Add(inv);
-                                }
-                            }
-                            Debug.Log(DataBaseInfo.allInventories.Count);
-                            manager.UpdateRecordByFieldName<Shop>("Id", tempShop[temp].Id.ToString(), tempShop[temp]);
+
+                            manager.UpdateRecordByFieldName<Inventory>("Id", tempShop[temp].Id.ToString(), tempShop[temp]);
                         }
                     }
-
                     if (tempShop[temp].Amount <= 0)
                     {
                         tempItems.RemoveAt(temp);
@@ -273,7 +227,6 @@ public class ShopForm : MonoBehaviour
                     PlayerStats.QuitScene();
                 }
             }
-            #endregion
             #region PDF
             if (GUI.Button(new Rect(Screen.width - 230, Screen.height - 70, 120, 50), "Генерация PDF"))
             {

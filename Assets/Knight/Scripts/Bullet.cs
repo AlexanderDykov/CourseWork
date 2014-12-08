@@ -30,6 +30,7 @@ public class Bullet : MonoBehaviour {
 		{
             //
 			//Destroy the bullet
+            PlayerStats.ChangeHP(-10f);
 			StartCoroutine(Destroy(0));
 		}
         else

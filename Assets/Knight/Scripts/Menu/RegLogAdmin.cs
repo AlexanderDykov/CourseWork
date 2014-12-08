@@ -102,6 +102,7 @@ public class RegLogAdmin : MonoBehaviour {
             if (manager.ConnectToDatabase())
             {
                 p = (List<Pers>)manager.ReadByFieldName<Pers>("UserId",DataBaseInfo.currentUserId);
+                DataBaseInfo.perses = (List<Pers>)manager.ReadAll<Pers>();
                 DataBaseInfo.allProgress = (List<Progress>)manager.ReadAll<Progress>();
                 DataBaseInfo.allEquipedItems = (List<EquipedItems>)manager.ReadAll<EquipedItems>();
                 //DataBaseInfo.currentEquipedItems = (EquipedItems)manager.ReadByFieldName<EquipedItems>("UserId", DataBaseInfo.currentUserId).First();
@@ -115,7 +116,29 @@ public class RegLogAdmin : MonoBehaviour {
     public void StartGame()
     {
         if (persStr != "Choose pers")
+        {
+            Debug.Log(DataBaseInfo.currentPersId);
+           
+            DataBaseInfo.currentEquipedItems = DataBaseInfo.allEquipedItems.FirstOrDefault(x => x.PersId == DataBaseInfo.currentPersId);
+            DataBaseInfo.currentProgress = DataBaseInfo.allProgress.FirstOrDefault(x => x.PersId == DataBaseInfo.currentPersId);
+
+            DataBaseInfo.currentInventory = new List<Inventory>();
+            foreach (var inv in DataBaseInfo.allInventories)
+            {
+                if (inv.PersId == DataBaseInfo.currentPersId)
+                {
+                    DataBaseInfo.currentInventory.Add(inv);
+                }
+            }
+            Pers a = DataBaseInfo.perses.FirstOrDefault(x => x.Id == DataBaseInfo.currentPersId);
+            Debug.Log(a.RaceId);
+            //User a = DataBaseInfo.
+            PlayerStats.race = DataBaseInfo.races.FirstOrDefault(x => x.Id == a.RaceId);
+           
+            PlayerStats.level = DataBaseInfo.currentProgress.CurrentLevel;
+
             Application.LoadLevel(1);
+        }
     }
     void OnGUI()
     {
@@ -160,13 +183,12 @@ public class RegLogAdmin : MonoBehaviour {
                     {
                         for (int i = 0; i < p.Count; i++)
                         {
-                            Race rac = DataBaseInfo.races.Single(x => x.Id == p[i].RaceId);
+                            Race rac = DataBaseInfo.races.FirstOrDefault(x => x.Id == p[i].RaceId);
                             if (GUILayout.Button("Name: " + p[i].Name + " Race:" + rac.RaceName, GUILayout.ExpandWidth(true)))
                             {
                                 persStr = p[i].Name;
                                 DataBaseInfo.currentPersId = p[i].Id;
-                                DataBaseInfo.currentEquipedItems = DataBaseInfo.allEquipedItems.Single(x => x.PersId == p[i].Id);
-                                DataBaseInfo.currentProgress = DataBaseInfo.allProgress.Single(x => x.PersId == p[i].Id);
+                              
                                 isOpen = false;
                             }
                         }
@@ -190,7 +212,9 @@ public class RegLogAdmin : MonoBehaviour {
     public void CancelPers()
     {
         choosePersFlag = false;
+        createPersFlag = false;
         persInfo.SetActive(true);
+        createPers.SetActive(false);
         choosePers.SetActive(false);
     }
     public void Login()
@@ -225,6 +249,7 @@ public class RegLogAdmin : MonoBehaviour {
                         if (user1 == null)
                         {
                             manager.InsertRecord<User>(new User() { Login = login.text, Password = password.text });
+                            DataBaseInfo.users = (List<User>)manager.ReadAll<User>();
                             Debug.Log("Success!");
                             Back();
                         }

@@ -57,7 +57,7 @@ public class Monster : MonoBehaviour {
     {
         damage += 2 * e.GetNumber();        
     }
-    void OnEnabled()
+    void OnEnable()
     {
         HP = maxHP;
         UpdateHealthBar();
@@ -74,6 +74,15 @@ public class Monster : MonoBehaviour {
         if (HP <= 0)
         {
             HP = 0;
+            DataBaseInfo.currentProgress.Money += 1;
+            DataBaseInfo.currentProgress.Score += 1;//count dead monster
+            PlayerStats.exp += 1;
+            if (PlayerStats.exp == 10)
+            {
+                PlayerStats.exp = 0;
+                DataBaseInfo.currentProgress.CurrentLevel++;
+            }
+            //DataBaseInfo.currentProgress. += 1;
             ObjectPool.Instance.Remove(gameObject);
         }
         if (HP > maxHP)

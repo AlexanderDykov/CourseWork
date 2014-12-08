@@ -150,7 +150,7 @@ public class UpdateItem : MonoBehaviour {
                 {
                     if (manager.ConnectToDatabase())
                     {
-                        Condition con = DataBaseInfo.conditions.Single(x => x.Level == int.Parse(lvl) && x.RaceId == raceId);
+                        Condition con = DataBaseInfo.conditions.FirstOrDefault(x => x.Level == int.Parse(lvl) && x.RaceId == raceId);
                        if (con == null)
                         {
                             manager.InsertRecord<Condition>(new Condition() { Level = int.Parse(lvl), RaceId = raceId });

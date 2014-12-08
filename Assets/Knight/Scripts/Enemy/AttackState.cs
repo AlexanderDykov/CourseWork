@@ -12,6 +12,7 @@ public class AttackState : IState {
             switch (_monster.monsterType)
             {
                 case MonsterType.Skeleton:
+                    PlayerStats.ChangeHP(-15f);
                     tmpFireTime = 0;
                     break;
                 case MonsterType.Spider:

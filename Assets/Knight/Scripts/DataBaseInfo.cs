@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Tables;
 using Assets.Scripts;
+using System.Linq;
 
 namespace Tables
 {
@@ -215,6 +216,7 @@ namespace Tables
         public int PersId { get; set; }
         [ForeignKeyField(true, "Item", "Id")]
         public int ItemId { get; set; }
+        public int Amount { get; set; }
         public Inventory()
         {
             Id = 0;
@@ -240,10 +242,22 @@ namespace Tables
             Money = 0;
             PersId = 0;
         }
+        public class MaxToMin : IComparer<Progress>
+        {
+            public int Compare(Progress x, Progress y)
+            {
+                if (x.Score< y.Score)
+                    return 1;
+                if (x.Score > y.Score)
+                    return -1;
+                return 0;
+            }
+        }
     }
     #endregion
 }
-public class DataBaseInfo : MonoBehaviour {       
+public class DataBaseInfo : MonoBehaviour
+{
     //for current session
     public static int currentUserId;
     public static int currentPersId;
@@ -260,17 +274,19 @@ public class DataBaseInfo : MonoBehaviour {
     public static List<Inventory> allInventories;
     public static List<Progress> allProgress;
     public static List<EquipedItems> allEquipedItems;
+    public static List<Pers> perses;
     //for log- reg- in
     public static List<Admin> admins;
     public static List<User> users;
-    void Awake () {
+    void Awake()
+    {
         using (DatabaseManager manager = new DatabaseManager("gamedata.db"))
         {
             if (manager.ConnectToDatabase())
             {
                 users = (List<User>)manager.ReadAll<User>();
                 admins = (List<Admin>)manager.ReadAll<Admin>();
-
+                perses = (List<Pers>)manager.ReadAll<Pers>();
                 items = (List<Item>)manager.ReadAll<Item>();
                 conditions = (List<Condition>)manager.ReadAll<Condition>();
                 types = (List<ItemType>)manager.ReadAll<ItemType>();
@@ -280,7 +296,7 @@ public class DataBaseInfo : MonoBehaviour {
                 allProgress = (List<Progress>)manager.ReadAll<Progress>();
                 allEquipedItems = (List<EquipedItems>)manager.ReadAll<EquipedItems>();
             }
-        }   
+        }
         DontDestroyOnLoad(gameObject);
     }
 }

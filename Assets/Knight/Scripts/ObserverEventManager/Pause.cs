@@ -2,20 +2,12 @@
 using System.Collections;
 
 public class Pause : MonoBehaviour {
-
-    bool paused = false;
+    public GameObject menu;
     void OnMouseDown()
     {
-        if (!paused)
-        {
-            paused = !paused;
-            Time.timeScale = 0;
-        }
-        else
-        {
-            paused = !paused;
-            Time.timeScale = 1;
-        }
-
+        Time.timeScale = 0;
+        menu.SetActive(true);
+        this.gameObject.SetActive(false);
+        
     }
 }
